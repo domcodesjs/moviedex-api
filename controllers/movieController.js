@@ -2,6 +2,7 @@ const db = require('../db.json');
 
 exports.getMovies = async (req, res) => {
   const query = new URLSearchParams(req.query);
+  let movies = db;
 
   if (query.has('genre')) {
     const genre = query.get('genre');
@@ -9,25 +10,13 @@ exports.getMovies = async (req, res) => {
     if (genre.trim() === '') {
       return res.json({
         success: false,
-        message: 'Please provide a valid query'
+        message: 'Please provide a valid genre query'
       });
     }
 
-    const movies = db.filter((movie) =>
+    movies = movies.filter((movie) =>
       movie.genre.toLocaleLowerCase().includes(genre.toLocaleLowerCase())
     );
-
-    if (!movies.length) {
-      return res.json({
-        success: true,
-        message: 'No movies found'
-      });
-    }
-
-    return res.json({
-      success: true,
-      movies
-    });
   }
 
   if (query.has('country')) {
@@ -36,25 +25,13 @@ exports.getMovies = async (req, res) => {
     if (country.trim() === '') {
       return res.json({
         success: false,
-        message: 'Please provide a valid query'
+        message: 'Please provide a valid country query'
       });
     }
 
-    const movies = db.filter((movie) =>
+    movies = movies.filter((movie) =>
       movie.country.toLocaleLowerCase().includes(country.toLocaleLowerCase())
     );
-
-    if (!movies.length) {
-      return res.json({
-        success: true,
-        message: 'No movies found'
-      });
-    }
-
-    return res.json({
-      success: true,
-      movies
-    });
   }
 
   if (query.has('avg_vote')) {
@@ -63,27 +40,15 @@ exports.getMovies = async (req, res) => {
     if (avg_vote.trim() === '') {
       return res.json({
         success: false,
-        message: 'Please provide a valid query'
+        message: 'Please provide a valid avg_vote query'
       });
     }
 
-    const movies = db.filter((movie) => movie.avg_vote >= Number(avg_vote));
-
-    if (!movies.length) {
-      return res.json({
-        success: true,
-        message: 'No movies found'
-      });
-    }
-
-    return res.json({
-      success: true,
-      movies
-    });
+    movies = movies.filter((movie) => movie.avg_vote >= Number(avg_vote));
   }
 
   return res.json({
-    success: false,
-    message: 'Invalid query'
+    success: true,
+    movies
   });
 };

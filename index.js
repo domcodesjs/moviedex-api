@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -16,5 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/movie', movieRoutes);
 
-const port = 4000;
-app.listen(port, () => console.log(`Express is running on port ${port}`));
+app.listen(process.env.PORT, () =>
+  console.log(`Express is running on port ${process.env.PORT}`)
+);
